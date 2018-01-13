@@ -28,10 +28,10 @@ library:
         - cassava
         - attoparsec
         - bytestring
-        - ede
-        - unordered-containers
         - text
-        - aeson
+        - vector
+        - unordered-containers
+        - text-show
 
 executables:
   ingcsv2hledger-exe:
