@@ -25,7 +25,7 @@ import Data.Aeson.Types (Value(..))
 --     liabilities:debts    $-1
 ledgerTemplateBody :: BS.ByteString
 ledgerTemplateBody = pack "{{ Datum }}/10/01 {{ Mededelingen }}\n\
-        \    assets:bank:{{ Rekening }} {{ amount }}\n"
+        \    assets:bank:{{ Rekening }}  €{{ amount }}\n"
 
 ledgerTemplate = case parse ledgerTemplateBody of
     Success template -> template
