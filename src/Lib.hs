@@ -50,9 +50,9 @@ printLedgerRecordFor record = case render ledgerTemplate (contextOf record) of
     Failure _ -> print ("FAIL")
 
 
-someFunc :: IO ()
-someFunc = do
-    csvContents <- BS.readFile "ing.csv"
+transformIngFileToHLedger :: FilePath -> IO ()
+transformIngFileToHLedger filepath = do
+    csvContents <- BS.readFile filepath
     case parseOnly (csvWithHeader defaultDecodeOptions) csvContents of
         Left _ -> print "Failed to parse"
         Right (header, rows) -> do
