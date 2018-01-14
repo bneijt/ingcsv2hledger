@@ -22,6 +22,20 @@ import TextShow.Data.Floating (showbFFloat)
 
 import Data.Decimal
 
+import Data.Maybe
+
+data LedgerTransaction = LedgerTransaction {
+    transactionAccount  :: Text,
+    transactionCurrency :: Maybe Text,
+    transactionAmount :: Maybe Decimal
+}
+
+data LedgerRecord = LedgerRecord {
+    recordComment :: Text,
+    dateOfRecord :: Text,
+    transactions :: [LedgerTransaction]
+}
+
 
 -- ["Datum","Naam / Omschrijving","Rekening","Tegenrekening","Code","Af Bij","Bedrag (EUR)","MutatieSoort","Mededelingen"]
 data Transaction = Transaction {
