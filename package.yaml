@@ -1,14 +1,13 @@
 name:                ingcsv2hledger
 version:             0.1.0.0
-github:              "githubuser/ingcsv2hledger"
-license:             BSD3
-author:              "Author name here"
-maintainer:          "example@example.com"
-copyright:           "2018 Author name here"
+github:              "bneijt/ingcsv2hledger"
+license:             GPLv3
+author:              "Bram Neijt"
+maintainer:          "bneijt@gmail.com"
+copyright:           "2018 Bram Neijt"
 
 extra-source-files:
 - README.md
-- ChangeLog.md
 
 # Metadata used when publishing your package
 # synopsis:            Short description of your package
@@ -33,6 +32,8 @@ library:
         - unordered-containers
         - text-show
         - Decimal
+        - time
+        - uuid
 
 executables:
   ingcsv2hledger-exe:
