@@ -51,9 +51,6 @@ slice :: Int -> Int -> Text -> Text
 slice from to value = T.take (to - from) part
     where part = T.drop from value
 
-showAmount :: Decimal -> Text
-showAmount d = T.pack $ show d
-
 
 decimalValue :: NamedRecord -> BS.ByteString -> Decimal
 decimalValue r k = readDecimal $ textValue r k

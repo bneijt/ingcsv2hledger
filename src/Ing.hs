@@ -16,19 +16,22 @@ toTransaction :: IngTransaction -> M.Transaction
 toTransaction i = M.Transaction {
     M.transactionTime = fromJust $ parseTimeM True defaultTimeLocale "%Y-%-m-%-d" "2010-3-04",
     M.decAccount = M.Account {
-        M.accountIBAN = "",
+        M.accountIBAN = decrementingAccount,
         M.accountHolder = M.emptyAccountHolder
     },
     M.incAccount = M.Account {
-        M.accountIBAN = "",
+        M.accountIBAN = incrementingAccount,
         M.accountHolder = M.emptyAccountHolder
     },
-    M.amount = 0,
+    M.amount = amountInEuro i,
     M.currency = "€",
     M.comment = "",
     M.description = "",
     M.transactionContext = M.Other
-}
+    }
+    where
+        decrementingAccount = if afBij i == "Af" then (fromAccount i) else (toAccount i)
+        incrementingAccount = if afBij i == "Af" then (toAccount i) else (fromAccount i)
 
 loadIngCsvFile :: FilePath -> IO (Either Text [M.Transaction])
 loadIngCsvFile filepath = do
