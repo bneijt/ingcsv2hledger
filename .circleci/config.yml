@@ -1,0 +1,22 @@
+version: 2
+jobs:
+    build:
+        docker:
+            - image: base/archlinux:latest
+        steps:
+            - checkout
+            - run:
+                name: Install stack
+                command: pacman --noconfirm -Sy stack
+            - run:
+                name: Stack setup
+                command: stack --install-ghc upgrade
+            - run:
+                name: Stack configure
+                command: stack build --no-system-ghc --only-configure
+            - run:
+                name: Build
+                command: stack build
+            - run:
+                name: Test
+                command: stack test
