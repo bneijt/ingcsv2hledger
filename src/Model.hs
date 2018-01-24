@@ -18,6 +18,7 @@ import Data.Text (Text(..))
 import Data.Decimal (Decimal(..))
 import Data.Time.Format (parseTimeM, defaultTimeLocale)
 import Data.Maybe (fromJust)
+import Data.Monoid ((<>))
 
 data AccountHolder = AccountHolder {
     name :: Text
@@ -54,7 +55,7 @@ data TransactionContext = PayTerminal {
 
 humanizedTransactionContext :: TransactionContext -> Text
 humanizedTransactionContext trxc = case trxc of
-    PayTerminal _ _ _ _ -> "Payment terminal"
+    PayTerminal card paymentTime terminalCode transactionIdentifier -> "Payment at terminal with card " <> card
     Withdrawl -> "Withdrawl"
     Periodic  -> "Periodic"
     Reserved  -> "Reserved"

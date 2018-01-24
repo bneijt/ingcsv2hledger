@@ -36,7 +36,7 @@ formattedDate t = T.pack $ formatTime defaultTimeLocale "%F" (M.transactionTime 
 hLedgerRecordFrom :: M.Transaction -> Text
 hLedgerRecordFrom transaction =
     ""
-    <> (formattedDate transaction) <> " " <> (M.humanizedTransactionContext $ M.transactionContext transaction) <> " " <> (M.description transaction) <> "\n"
+    <> (formattedDate transaction) <> " " <> (M.humanizedTransactionContext $ M.transactionContext transaction) <> ": " <> (M.description transaction) <> "\n"
     <> (if T.length (M.accountIBAN (M.decAccount transaction)) > 0
         then "    accounts:iban:" <> M.accountIBAN (M.decAccount transaction) <> "   €" <> (showAmount $ -(M.amount transaction)) <> "\n"
         else "")
