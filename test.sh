@@ -2,6 +2,6 @@
 set -e
 stack build
 
-stack exec ingcsv2hledger-exe | tee a.journal
+stack exec ingcsv2hledger-exe *.csv | tee ingcsvs.journal
 
-hledger -f a.journal accounts
+hledger -f ingcsvs.journal accounts

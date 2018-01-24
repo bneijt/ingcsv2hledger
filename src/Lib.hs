@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 module Lib
-    ( transformIngFileToHLedger
+    ( transformIngFilesToHLedger
     ) where
 
 import Data.Csv.Parser (csvWithHeader, defaultDecodeOptions)
@@ -45,10 +45,18 @@ hLedgerRecordFrom transaction =
         else "    assets:cash\n")
 
 
-
-transformIngFileToHLedger :: FilePath -> IO ()
-transformIngFileToHLedger filepath = do
+loadtransactionsFrom :: FilePath -> IO [M.Transaction]
+loadtransactionsFrom filepath = do
     eitherTransactionOrFailure <- loadIngCsvFile filepath
     case eitherTransactionOrFailure of
-        Right transactions -> mapM_ (\t -> TIO.putStrLn (hLedgerRecordFrom t)) transactions
-        Left problem -> print problem
+        Right transactions -> return transactions
+        Left problem -> error (T.unpack problem)
+
+
+transformIngFilesToHLedger :: [FilePath] -> IO ()
+transformIngFilesToHLedger files = do
+    transactionsPerFile <- mapM loadtransactionsFrom files
+    let allTransactions = concat transactionsPerFile
+    -- sort transactions by date
+    -- nub transactions
+    mapM_ (\t -> TIO.putStrLn (hLedgerRecordFrom t)) allTransactions
