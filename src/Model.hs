@@ -7,6 +7,7 @@ module Model
         emptyAccount,
         TransactionContext(..),
         emptyTransactionContext,
+        humanizedTransactionContext,
         Transaction(..),
         emptyTransaction
     ) where
@@ -20,7 +21,7 @@ import Data.Maybe (fromJust)
 
 data AccountHolder = AccountHolder {
     name :: Text
-}
+} deriving (Show)
 
 emptyAccountHolder = AccountHolder {
     name = ""
@@ -29,7 +30,7 @@ emptyAccountHolder = AccountHolder {
 data Account = Account {
     accountIBAN :: Text,
     accountHolder :: AccountHolder
-}
+} deriving (Show)
 
 emptyAccount = Account {
     accountIBAN = "",
@@ -42,12 +43,25 @@ data TransactionContext = PayTerminal {
     terminalCode :: Text,
     transactionIdentifier :: Text
     }
+    | Withdrawl
     | Periodic
     | Reserved
     | Rent
-    | Internet
+    | Web
     | Recessed -- Incasso in dutch
     | Other
+  deriving (Show)
+
+humanizedTransactionContext :: TransactionContext -> Text
+humanizedTransactionContext trxc = case trxc of
+    PayTerminal _ _ _ _ -> "Payment terminal"
+    Withdrawl -> "Withdrawl"
+    Periodic  -> "Periodic"
+    Reserved  -> "Reserved"
+    Rent      -> "Rent"
+    Web       -> "Web"
+    Recessed  -> "Recessed"
+    Other     -> "Other"
 
 emptyTransactionContext = Other
 
@@ -60,7 +74,7 @@ data Transaction = Transaction {
     comment :: Text,
     description :: Text,
     transactionContext :: TransactionContext
-}
+} deriving (Show)
 
 
 emptyTransaction :: Transaction
