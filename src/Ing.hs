@@ -5,7 +5,7 @@ module Ing
 ) where
 
 import qualified Model as M
-import Data.Text (Text(..))
+import Data.Text (Text(..), unpack)
 import IngCsv(readIngCsvFile, IngTransaction(..))
 
 import Data.Time.Format (parseTimeM, defaultTimeLocale)
@@ -14,7 +14,7 @@ import Data.Maybe (fromJust)
 
 toTransaction :: IngTransaction -> M.Transaction
 toTransaction i = M.Transaction {
-    M.transactionTime = fromJust $ parseTimeM True defaultTimeLocale "%Y-%-m-%-d" "2010-3-04",
+    M.transactionTime = fromJust $ parseTimeM True defaultTimeLocale "%Y%m%d" (unpack $ dateOfTransaction i),
     M.decAccount = M.Account {
         M.accountIBAN = decrementingAccount,
         M.accountHolder = M.emptyAccountHolder
@@ -25,8 +25,8 @@ toTransaction i = M.Transaction {
     },
     M.amount = amountInEuro i,
     M.currency = "€",
-    M.comment = "",
-    M.description = "",
+    M.comment = comment i,
+    M.description = description i,
     M.transactionContext = M.Other
     }
     where

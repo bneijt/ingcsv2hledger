@@ -24,22 +24,25 @@ import Data.Maybe
 
 import Ing (loadIngCsvFile)
 import qualified Model as M
+import  Data.Time (formatTime, defaultTimeLocale)
 
 showAmount :: Decimal -> Text
 showAmount d = T.pack $ show d
+
+formattedDate :: M.Transaction -> Text
+formattedDate t = T.pack $ formatTime defaultTimeLocale "%F" (M.transactionTime t)
 
 
 hLedgerRecordFrom :: M.Transaction -> Text
 hLedgerRecordFrom transaction =
     ""
-    <> "2012-01-01" <> " " <> "description" <> "\n"
-    <> "    accounts:bank:" <> M.accountIBAN (M.decAccount transaction) <> "   €" <> (showAmount $ -(M.amount transaction)) <> "\n"
+    <> (formattedDate transaction) <> " " <> (M.description transaction) <> "\n"
+    <> (if T.length (M.accountIBAN (M.decAccount transaction)) > 0
+        then "    accounts:iban:" <> M.accountIBAN (M.decAccount transaction) <> "   €" <> (showAmount $ -(M.amount transaction)) <> "\n"
+        else "")
     <> (if T.length (M.accountIBAN (M.incAccount transaction)) > 0
-        then "    accounts:bank:" <> M.accountIBAN (M.incAccount transaction) <> "  €" <> (showAmount $ M.amount transaction)  <> "\n"
+        then "    accounts:iban:" <> M.accountIBAN (M.incAccount transaction) <> "  €" <> (showAmount $ M.amount transaction)  <> "\n"
         else "    assets:cash\n")
-    -- <> "\n"
-    -- where
-    --     td = (dateOfTransaction transaction)
 
 
 
