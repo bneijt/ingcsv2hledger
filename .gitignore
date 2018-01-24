@@ -1,4 +1,6 @@
 /.stack-work
 ingcsv2hledger.cabal
 *~
+/*.journal
+/*.csv
 /.hledger-web_client_session_key.aes
