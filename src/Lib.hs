@@ -16,6 +16,8 @@ import Data.Vector (toList)
 import Data.Monoid ((<>))
 import qualified Data.Text.IO as TIO
 import Data.Text.Read (double)
+import Data.List (nubBy, sortBy)
+import Data.Ord (comparing)
 
 import TextShow (showt, toText)
 import TextShow.Data.Floating (showbFFloat)
@@ -24,7 +26,7 @@ import Data.Maybe
 
 import Ing (loadIngCsvFile)
 import qualified Model as M
-import  Data.Time (formatTime, defaultTimeLocale)
+import  Data.Time (formatTime, defaultTimeLocale, zonedTimeToLocalTime)
 
 showAmount :: Decimal -> Text
 showAmount d = T.pack $ show d
@@ -58,5 +60,7 @@ transformIngFilesToHLedger files = do
     transactionsPerFile <- mapM loadtransactionsFrom files
     let allTransactions = concat transactionsPerFile
     -- sort transactions by date
+    let sortedTransactions = sortBy (comparing $ zonedTimeToLocalTime . M.transactionTime) allTransactions
     -- nub transactions
-    mapM_ (\t -> TIO.putStrLn (hLedgerRecordFrom t)) allTransactions
+    -- let uniqueTransactions = nubBy (\a b -> (show a) == (show b)) sortedTransactions
+    mapM_ (\t -> TIO.putStrLn (hLedgerRecordFrom t)) sortedTransactions

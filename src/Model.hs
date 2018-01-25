@@ -78,6 +78,7 @@ data Transaction = Transaction {
 } deriving (Show)
 
 
+
 emptyTransaction :: Transaction
 emptyTransaction = Transaction {
     transactionTime = fromJust $ parseTimeM True defaultTimeLocale "%Y-%-m-%-d" "2010-3-04",
