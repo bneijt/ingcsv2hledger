@@ -16,7 +16,7 @@ import Data.Vector (toList)
 import Data.Monoid ((<>))
 import qualified Data.Text.IO as TIO
 import Data.Text.Read (double)
-import Data.List (nubBy, sortBy)
+import Data.List (nubBy, sortBy, nub)
 import Data.Ord (comparing)
 
 import TextShow (showt, toText)
@@ -59,8 +59,6 @@ transformIngFilesToHLedger :: [FilePath] -> IO ()
 transformIngFilesToHLedger files = do
     transactionsPerFile <- mapM loadtransactionsFrom files
     let allTransactions = concat transactionsPerFile
-    -- sort transactions by date
     let sortedTransactions = sortBy (comparing $ zonedTimeToLocalTime . M.transactionTime) allTransactions
-    -- nub transactions
-    -- let uniqueTransactions = nubBy (\a b -> (show a) == (show b)) sortedTransactions
-    mapM_ (\t -> TIO.putStrLn (hLedgerRecordFrom t)) sortedTransactions
+    let uniqueTransactions = nub sortedTransactions
+    mapM_ (\t -> TIO.putStrLn (hLedgerRecordFrom t)) uniqueTransactions

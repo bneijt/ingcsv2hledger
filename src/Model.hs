@@ -13,7 +13,7 @@ module Model
     ) where
 
 import Data.UUID (UUID(..))
-import Data.Time (ZonedTime)
+import Data.Time (ZonedTime, zonedTimeToLocalTime)
 import Data.Text (Text(..))
 import Data.Decimal (Decimal(..))
 import Data.Time.Format (parseTimeM, defaultTimeLocale)
@@ -22,7 +22,7 @@ import Data.Monoid ((<>))
 
 data AccountHolder = AccountHolder {
     name :: Text
-} deriving (Show)
+} deriving (Show, Eq)
 
 emptyAccountHolder = AccountHolder {
     name = ""
@@ -31,7 +31,7 @@ emptyAccountHolder = AccountHolder {
 data Account = Account {
     accountIBAN :: Text,
     accountHolder :: AccountHolder
-} deriving (Show)
+} deriving (Show, Eq)
 
 emptyAccount = Account {
     accountIBAN = "",
@@ -51,7 +51,7 @@ data TransactionContext = PayTerminal {
     | Web
     | Recessed -- Incasso in dutch
     | Other
-  deriving (Show)
+  deriving (Show, Eq)
 
 humanizedTransactionContext :: TransactionContext -> Text
 humanizedTransactionContext trxc = case trxc of
@@ -75,9 +75,10 @@ data Transaction = Transaction {
     comment :: Text,
     description :: Text,
     transactionContext :: TransactionContext
-} deriving (Show)
+} deriving (Show, Eq)
 
-
+instance Eq ZonedTime where
+    x == y = zonedTimeToLocalTime x == zonedTimeToLocalTime y
 
 emptyTransaction :: Transaction
 emptyTransaction = Transaction {
